@@ -18,8 +18,16 @@ public class UserUpdateServlet extends HttpServlet {
 			users = DBConnection.openConnection();
 			String id = request.getParameter("updateId");
 			String name = request.getParameter("updateName");
+			String picture = request.getParameter("updatePicture");
 			Statement state = users.createStatement();
-			state.executeUpdate("UPDATE user_table SET name='" + name + "' WHERE id ='" + id + "'");
+
+			if(name.length() != 0 && picture.length() != 0){
+				state.executeUpdate("UPDATE user_table SET name='" + name + "',picture='" + picture + "' WHERE id ='" + id + "'");
+			}else if(picture.length() != 0){
+				state.executeUpdate("UPDATE user_table SET picture='" + picture + "' WHERE id ='" + id + "'");
+			}else if(name.length() != 0){
+				state.executeUpdate("UPDATE user_table SET name='" + name + "' WHERE id ='" + id + "'");
+			}
 			response.sendRedirect("/select"); //UserSelectServletを呼び出す
 			DBConnection.closeConnection(users, state);
 	} catch (SQLException e) {
